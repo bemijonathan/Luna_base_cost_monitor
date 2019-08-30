@@ -5,6 +5,7 @@ class CreateWorkers < ActiveRecord::Migration[5.2]
       t.string :email
       t.string :password
       t.string :token
+      # t.has_many :items , index: true
       t.timestamps
     end
   end

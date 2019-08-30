@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 2019_08_29_163123) do
     t.string "amount"
     t.boolean "transaction_status"
     t.string "name"
+    t.integer "worker_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

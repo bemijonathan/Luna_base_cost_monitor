@@ -1,3 +1,3 @@
 class Worker < ApplicationRecord
-  has_many :item
+  has_many :items
 end

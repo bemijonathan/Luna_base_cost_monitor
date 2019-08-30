@@ -4,6 +4,7 @@ class UserCreationController < ApplicationController
   # 
 
   def create 
+    
     worker = Worker.new(name: params[:name], email: params[:email], password: params[:password])
 
     hmac_secret = 'my$ecretK3y'

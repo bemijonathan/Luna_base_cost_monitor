@@ -1,3 +1,5 @@
+require 'jwt'
+
 class ItemsController < ApplicationController
   before_action :set_item, only: [:destroy]
 
@@ -7,29 +9,36 @@ class ItemsController < ApplicationController
   end
 
   def create 
+      token = request.headers['auth']
 
-    puts "#############"
-    token = request.headers['auth']
+      hmac_secret = 'my$ecretK3y'
 
-    user_id = Worker.where(token: token).first
+      decoded_token = JWT.decode token, hmac_secret, true, { algorithm: 'HS256' }
 
-    create_item = Item.new(item_params)
 
-    # create_item.worker = user_id
-
-    user_id.item << create_item 
-
-    # .worker << user_id
-
-    # if @create_item.save
-    #   render json: @create_item, status: :ok
-    # else
-    #   render status: :unprocessable_entity
-    # end
+    if decoded_token
+        current_user = Worker.where(token: token).first
+        @item = current_user.items.build(item_params)
+        if @item.save
+          render json: @item, status: :ok
+        else
+          render status: :unprocessable_entity
+        end
+      else
+    end
   end
 
   def destroy 
-    @item.destroy
+
+    
+
+    token = request.headers['auth']
+    user_id = Worker.where(token: token).first.id
+
+    if @item.worker_id === user_id
+      @item.destroy
+    end
+
     if @item.destroyed?
       render json: {status: 'SUCCESS', message:'destroyed Items'},status: :ok
     else

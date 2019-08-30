@@ -7,12 +7,25 @@ class ItemsController < ApplicationController
   end
 
   def create 
-    @create_item = Item.new(item_params)
-    if @create_item.save
-      render json: @create_item, status: :ok
-    else
-      render status: :unprocessable_entity
-    end
+
+    puts "#############"
+    token = request.headers['auth']
+
+    user_id = Worker.where(token: token).first
+
+    create_item = Item.new(item_params)
+
+    # create_item.worker = user_id
+
+    user_id.item << create_item 
+
+    # .worker << user_id
+
+    # if @create_item.save
+    #   render json: @create_item, status: :ok
+    # else
+    #   render status: :unprocessable_entity
+    # end
   end
 
   def destroy 

@@ -5,17 +5,13 @@ class ItemsController < ApplicationController
 
   def index
     @item = Item.all
-    render json: {status: 'SUCCESS', message:'All Items', data:@item},status: :ok
+    render json: {status: 'SUCCESS', message:'All Items', data: @item},status: :ok
   end
 
   def create 
       token = request.headers['auth']
-
       hmac_secret = 'my$ecretK3y'
-
       decoded_token = JWT.decode token, hmac_secret, true, { algorithm: 'HS256' }
-
-
     if decoded_token
         current_user = Worker.where(token: token).first
         @item = current_user.items.build(item_params)
@@ -29,16 +25,11 @@ class ItemsController < ApplicationController
   end
 
   def destroy 
-
-    
-
     token = request.headers['auth']
     user_id = Worker.where(token: token).first.id
-
     if @item.worker_id === user_id
       @item.destroy
     end
-
     if @item.destroyed?
       render json: {status: 'SUCCESS', message:'destroyed Items'},status: :ok
     else

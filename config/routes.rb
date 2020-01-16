@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  # devise_for :workers
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :items
-  resources :sessions, only: [:create, :destroy]
-  resources :user_creation
+  post "sign_up" => 'user_creation#create'
+  get "sign_out" => 'user_creation#destroy'
+  post "login_in" => 'user_creation#login'
+  get "workers" => "user_creation#all"
 end
